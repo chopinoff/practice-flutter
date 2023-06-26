@@ -26,8 +26,14 @@ class _AppState extends State<App> {
   int counter = 0;
 
   // IconButton 클릭 시 counter가 증가하도록 설정했으나 동작하지 않는 이유는?
+  // >> build가 다시 실행되지 않았기 때문
   void onClicked() {
-    counter += 1;
+    // setState : State class에게 데이터가 변경되었다고 알리는 함수
+    // setState를 실행하면 build를 다시 실행함 (update함)
+    // setState와 함수를 각각 작성해도 되지만 가독성을 위해 내부에 작성함
+    setState(() {
+      counter += 1;
+    });
   }
 
   @override
