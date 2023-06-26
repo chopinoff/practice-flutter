@@ -19,7 +19,6 @@ class App extends StatelessWidget {
             horizontal: 40,
           ),
           child: Column(
-            // Column으로 쌓이는 Widget들이 앞으로 왼쪽 정렬로 쌓이게 됨
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
@@ -64,7 +63,6 @@ class App extends StatelessWidget {
                 height: 5,
               ),
               const Text(
-                // 변수를 위한 $가 아니라는 것을 표시하기 위해 \$로 작성
                 "\$5 194 482",
                 style: TextStyle(
                   fontSize: 38,
@@ -77,16 +75,9 @@ class App extends StatelessWidget {
               ),
               Row(
                 children: [
-                  // Container : HTML의 div와 유사한 Widget
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.amber,
-                      // 1. 모서리 중 일부만 적용하고 싶을 때
-                      // borderRadius: BorderRadius.vertical(
-                      //   top: Radius.circular(20),
-                      //   bottom: Radius.circular(40),
-                      // ),
-                      // 2. 모서리 전체 적용할 때 : all 생략 가능
                       borderRadius: BorderRadius.circular(55),
                     ),
                     child: const Padding(
@@ -111,3 +102,12 @@ class App extends StatelessWidget {
     );
   }
 }
+
+// 파란색 경고줄 : const로 작성하라는 뜻
+// 설정 : 왼쪽 Settings > Command Palette > Open User Settings(JSON)
+// 1. const 자동 완성
+// "editor.codeActionsOnSave": {
+//     "source.fixAll": true
+// },
+// 2. 부모 자식관계 알려주는 GuideLine 생성 (VSCode 재시작)
+// "dart.previewFlutterUiGuides": true,
