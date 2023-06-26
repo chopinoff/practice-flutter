@@ -16,7 +16,6 @@ class App extends StatelessWidget {
         backgroundColor: const Color(
           0xFF181818,
         ),
-        // SingleChildScrollView : 스크롤이 가능하도록 하는 Widget
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -125,26 +124,23 @@ class App extends StatelessWidget {
                   amount: "6 428",
                   icon: Icons.euro_outlined,
                   isInverted: false,
+                  order: 1,
                 ),
-                Transform.translate(
-                  offset: const Offset(0, -20),
-                  child: const CurrencyCard(
-                    name: "Dollar",
-                    code: "USD",
-                    amount: "428",
-                    icon: Icons.attach_money_outlined,
-                    isInverted: true,
-                  ),
+                const CurrencyCard(
+                  name: "Dollar",
+                  code: "USD",
+                  amount: "428",
+                  icon: Icons.attach_money_outlined,
+                  isInverted: true,
+                  order: 2,
                 ),
-                Transform.translate(
-                  offset: const Offset(0, -40),
-                  child: const CurrencyCard(
-                    name: "Bitcoin",
-                    code: "BTC",
-                    amount: "9 785",
-                    icon: Icons.currency_bitcoin_outlined,
-                    isInverted: false,
-                  ),
+                const CurrencyCard(
+                  name: "Bitcoin",
+                  code: "BTC",
+                  amount: "9 785",
+                  icon: Icons.currency_bitcoin_outlined,
+                  isInverted: false,
+                  order: 3,
                 ),
               ],
             ),
