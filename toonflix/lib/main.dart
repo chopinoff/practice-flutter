@@ -12,11 +12,18 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  // LargeTitle을 toggle하는 함수 구현
+  bool showTitle = true;
+
+  void toggleTitle() {
+    setState(() {
+      showTitle = !showTitle;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme : 모든 스타일을 한 곳에서 지정할 수 있는 기능을 제공
-      // 모든 곳에 복사, 붙여넣기 할 필요가 없음
       theme: ThemeData(
         textTheme: const TextTheme(
           titleLarge: TextStyle(
@@ -24,13 +31,17 @@ class _AppState extends State<App> {
           ),
         ),
       ),
-      home: const Scaffold(
-        backgroundColor: Color(0xFFF4EDDB),
+      home: Scaffold(
+        backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MyLargeTitle(),
+              showTitle ? const MyLargeTitle() : const Text("nothing"),
+              IconButton(
+                onPressed: toggleTitle,
+                icon: const Icon(Icons.remove_red_eye),
+              )
             ],
           ),
         ),
@@ -39,29 +50,50 @@ class _AppState extends State<App> {
   }
 }
 
-// StatelessWidget인 MyLargeTitle에서 theme의 값에 접근해야 함
-// BuildContext : 상위 요소에 접근할 수 있게 하는 매개체
-// context는 MyLargeTitle Text의 상위 요소들의 모든 정보를 담고있음
-// Widget Tree에서 Widget의 위치를 제공해서 상위 요소 데이터에 접근할 수 있음
-// 바로 상위 요소 뿐만 아니라 최상위까지 탐색 가능
-class MyLargeTitle extends StatelessWidget {
+class MyLargeTitle extends StatefulWidget {
   const MyLargeTitle({
     super.key,
   });
 
   @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+// Widget Lifecycle의 대표적인 종류 (이 외에도 많음)
+// 1. initState
+// 2. build
+// 3. dispose
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  // initState : 부모 요소에 의존하는 데이터를 초기화하는 함수
+  // 일반적인 경우 initState를 사용하지 않고 바로 작성해도 초기화 가능함
+  // 부모 요소 (context)에 의존하는 경우에는 initState를 사용해야 함 ex) API의 업데이트를 반영할 때
+  // 항상 build 메서드보다 먼저 호출되어야 함, 오직 단 한번만 호출됨
+  @override
+  void initState() {
+    super.initState();
+    print("initState!");
+  }
+
+  // dispose : Widget이 스크린에서 제거될 때 호출되는 함수
+  // Widget이 Widget Tree에서 제거되기 전에 취소하고 싶을 때 사용함
+  // ex) API 업데이트, 이벤트 리스터 등을 더이상 반영하지 않으려고 할 때
+  @override
+  void dispose() {
+    super.dispose();
+    print("dispose!");
+  }
+
+  // Debug Console에 출력되는 순서
+  // 1. 앱 첫 build 시 : initState! build!
+  // 2. toggle 버튼으로 LargeTitle을 숨겼을 시 : dispose!
+  // 3. toggle 버튼으로 LargeTitle을 다시 나타나게 할 시 : initState! build!
+  @override
   Widget build(BuildContext context) {
+    print("build!");
     return Text(
       "My Large Title",
       style: TextStyle(
         fontSize: 30,
-        // 에러 발생 : color property에 null이 들어갈 수 없음
-        // - 방법 1 : titleLarge.color이 반드시 null이 아니라고 알려주기
-        // color: Theme.of(context).textTheme.titleLarge.color,
-        // - 방법 2 : titleLarge.color이 null이 아닐 때만 사용하기
-
-        // TODO 2130626 : 왜 Theme으로 바로 접근할 수 있는지 생각해보기
-        // TODO 2130626 : titleLarge?.color에서 물음표의 기능 정확하게 파악하기 (어떤 값을 반환하는지)
         color: Theme.of(context).textTheme.titleLarge?.color,
       ),
     );
