@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CurrencyCard extends StatelessWidget {
-  // Code Challenge : 카드의 순서를 받아서 offset 값을 자동으로 설정하도록 만들기
-  // 목적 : 반복적으로 사용되는 Widget(Transform.translate)을 Custom Widget 안에 넣어서 반복 줄임
   final String name, code, amount;
   final IconData icon;
   final bool isInverted;
   final int order;
 
-  // Code 작성 중 발생한 문제
-  // 1. offsetY를 build 함수 밖에 선언함
-  // - 원인 : offsetY에서 사용한 order은 initializer에서 접근할 수 없음
-  // - 해결 : build 함수 내에 선언함
-  // 2. offsetY를 Offset의 인자로 사용할 수 없음
-  // - 원인 : Offset은 double을 인자로 받는데 offsetY의 타입은 int임
-  // - 해결
-  //    - offsetY의 type을 결정한 order의 타입을 double로 변경하려고 했으나, order에는 int만 입력되는 것이 맞음.
-  //    - 따라서 order의 타입은 int로 유지하고, offsetY의 타입을 double로 명시함
   final _blackColor = const Color(0xFF1F2123);
 
   const CurrencyCard({
