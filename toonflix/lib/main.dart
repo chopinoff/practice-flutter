@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/button.dart';
 
 void main() {
   runApp(const App());
@@ -16,7 +17,7 @@ class App extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 40,
+            horizontal: 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,25 +74,21 @@ class App extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Row(
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(55),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: 40,
-                      ),
-                      child: Text(
-                        "Transfer",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
+                  // 내가 작성한 Widget을 Reusable Widget으로 분리하고 싶다
+                  // Code Actions (Ctrl + .) > Extract Widget
+                  // 코드 작업에 익숙해지기 위해서 직접 작성해보기
+                  Button(
+                    text: "Transfer",
+                    bgColor: Color(0xFFF1B33B),
+                    textColor: Colors.black,
+                  ),
+                  Button(
+                    text: "Request",
+                    bgColor: Color(0xFF1F2123),
+                    textColor: Colors.white,
                   ),
                 ],
               ),
@@ -102,12 +99,3 @@ class App extends StatelessWidget {
     );
   }
 }
-
-// 파란색 경고줄 : const로 작성하라는 뜻
-// 설정 : 왼쪽 Settings > Command Palette > Open User Settings(JSON)
-// 1. const 자동 완성
-// "editor.codeActionsOnSave": {
-//     "source.fixAll": true
-// },
-// 2. 부모 자식관계 알려주는 GuideLine 생성 (VSCode 재시작)
-// "dart.previewFlutterUiGuides": true,
