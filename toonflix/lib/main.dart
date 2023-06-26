@@ -117,6 +117,8 @@ class App extends StatelessWidget {
                 height: 20,
               ),
               Container(
+                // clipBehavior : 넘치는 영역을 어떻게 처리할지 설정
+                clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   color: const Color(0xFF1F2123),
                   borderRadius: BorderRadius.circular(25),
@@ -124,6 +126,7 @@ class App extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,6 +164,20 @@ class App extends StatelessWidget {
                             ],
                           ),
                         ],
+                      ),
+                      // Icon이 카드 사이즈보다 넘치게 하는 방법 : transform 사용
+                      // Transform : 사이즈, 위치 등을 조절하는 Widget (css의 transform과 유사)
+                      Transform.scale(
+                        scale: 2,
+                        // Icon : Icon을 사용하기 위한 Widget, 다양한 Icon이 있음
+                        child: Transform.translate(
+                          offset: const Offset(-5, 12),
+                          child: const Icon(
+                            Icons.euro_symbol_rounded,
+                            color: Colors.white,
+                            size: 85,
+                          ),
+                        ),
                       ),
                     ],
                   ),
