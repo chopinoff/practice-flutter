@@ -23,8 +23,7 @@
 
 ## Project Summary
 ### toonflix
-- Nomad Coders(노마드 코더) [플러터로 웹툰 앱 만들기](https://nomadcoders.co/flutter-for-beginners)를 바탕으로 만든 프로젝트
-
+Nomad Coders(노마드 코더) [**플러터로 웹툰 앱 만들기**](https://nomadcoders.co/flutter-for-beginners) 강의를 바탕으로 만든 프로젝트
 <details>
 <summary><b>1. Wallet App (UI Challenge) : <code>d9b243249c831d5b995ed8216d4f97425bbd88e4</code></b></summary>
 <div markdown="1">
@@ -43,9 +42,8 @@
 
 </div>
 </details>
-<br>
 <img src="image/toonflix_wallet_app.jpg" alt="Toonflix Wallet App" width="240px">
-<br><br>
+<br>
 <details>
 <summary><b>2. Pomodoro App : <code>93398b49199343a4dc8832e5f8c7ca6fdadeea84</code></b></summary>
 <div markdown="1">
@@ -66,6 +64,7 @@
 
 </div>
 </details>
-<br>
+<div align=left>
 <img src="image/toonflix_pomodoro_app.jpg" alt="Toonflix Wallet App" width="240px">
 <img src="image/toonflix_pomodoro_app_02.jpg" alt="Toonflix Wallet App" width="240px">
+</div>
