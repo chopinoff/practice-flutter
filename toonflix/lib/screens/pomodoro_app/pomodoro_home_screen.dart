@@ -46,12 +46,6 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
     });
   }
 
-  // Code Challenge : totalSeconds를 reset하는 함수 만들기
-  // Custom Details
-  // 1. totalSeconds가 1500일 경우에는 ResetIcon 노출하지 않음
-  // - isStarted로 관리 (start 후 reset되기 전까지 true)
-  // 2. isRunning일 때 배경 색상 변경
-
   void onResetPressed() {
     timer.cancel();
     setState(() {
@@ -93,14 +87,6 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
             flex: 2,
             child: Column(
               children: [
-                // Expanded와 Flexible은 유사한 Widget
-                // 공통점
-                // 1. flex(차지하는 비율)을 설정할 수 있음
-                // 2. Column, Row의 children에서만 사용할 수 있음
-                // 차이점
-                // - Expanded : 남아있는 공간 전부를 비율만큼 차지함
-                // - Flexible : 남아있는 공간을 차지하지만, child Widget이 공간을 전부 차지하지 않으면 나머지 공간은 버림
-                // - Expanded는 차지하는 비율, Flexible은 버리는 비율
                 Expanded(
                   flex: 3,
                   child: IconButton(
@@ -125,7 +111,6 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
                           icon: const Icon(Icons.refresh_outlined),
                           iconSize: 50,
                         )
-                      // SizedBox.shrink() : 빈 위젯, 가장 작은 크기를 가짐
                       : const SizedBox.shrink(),
                 ),
               ],
