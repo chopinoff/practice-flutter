@@ -1,101 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix/screens/pomodoro_app/pomodoro_home_screen.dart';
 
 void main() {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
-
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  // LargeTitle을 toggle하는 함수 구현
-  bool showTitle = true;
-
-  void toggleTitle() {
-    setState(() {
-      showTitle = !showTitle;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // 강의 예시 코드의 backgroundColor, headline1를 각각 다른 property로 대체 (deprecated)
+      // backgroundColor > colorScheme, headline1 > displayLarge
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFE7676C),
+          background: const Color(0xFFE7676C),
+        ),
         textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            color: Colors.red,
+          displayLarge: TextStyle(
+            color: Color(0xFF232B55),
           ),
         ),
+        cardColor: const Color(0xFFF4EDDB),
       ),
-      home: Scaffold(
-        backgroundColor: const Color(0xFFF4EDDB),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              showTitle ? const MyLargeTitle() : const Text("nothing"),
-              IconButton(
-                onPressed: toggleTitle,
-                icon: const Icon(Icons.remove_red_eye),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MyLargeTitle extends StatefulWidget {
-  const MyLargeTitle({
-    super.key,
-  });
-
-  @override
-  State<MyLargeTitle> createState() => _MyLargeTitleState();
-}
-// Widget Lifecycle의 대표적인 종류 (이 외에도 많음)
-// 1. initState
-// 2. build
-// 3. dispose
-
-class _MyLargeTitleState extends State<MyLargeTitle> {
-  // initState : 부모 요소에 의존하는 데이터를 초기화하는 함수
-  // 일반적인 경우 initState를 사용하지 않고 바로 작성해도 초기화 가능함
-  // 부모 요소 (context)에 의존하는 경우에는 initState를 사용해야 함 ex) API의 업데이트를 반영할 때
-  // 항상 build 메서드보다 먼저 호출되어야 함, 오직 단 한번만 호출됨
-  @override
-  void initState() {
-    super.initState();
-    print("initState!");
-  }
-
-  // dispose : Widget이 스크린에서 제거될 때 호출되는 함수
-  // Widget이 Widget Tree에서 제거되기 전에 취소하고 싶을 때 사용함
-  // ex) API 업데이트, 이벤트 리스터 등을 더이상 반영하지 않으려고 할 때
-  @override
-  void dispose() {
-    super.dispose();
-    print("dispose!");
-  }
-
-  // Debug Console에 출력되는 순서
-  // 1. 앱 첫 build 시 : initState! build!
-  // 2. toggle 버튼으로 LargeTitle을 숨겼을 시 : dispose!
-  // 3. toggle 버튼으로 LargeTitle을 다시 나타나게 할 시 : initState! build!
-  @override
-  Widget build(BuildContext context) {
-    print("build!");
-    return Text(
-      "My Large Title",
-      style: TextStyle(
-        fontSize: 30,
-        color: Theme.of(context).textTheme.titleLarge?.color,
-      ),
+      home: const PomodoroHomeScreen(),
     );
   }
 }
