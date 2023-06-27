@@ -9,33 +9,53 @@ class PomodoroHomeScreen extends StatefulWidget {
 }
 
 class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
-  int totalSeconds = 1500;
+  // static : class 안에서 해당 변수, 메서드가 인스턴스에 귀속되지 않고 class에 귀속된다는 의미
+  // const만 작성할 경우 static을 덧붙이거나 final로 변경하라는 에러 메시지가 뜸
+  static const twentyFiveMinutes = 1500;
+  int totalSeconds = twentyFiveMinutes;
+  int totalPomodoros = 0;
   bool isRunning = false;
   late Timer timer;
 
+  // 아래 함수들에서 timer에 관련된 코드를 setState 안에 넣어도 동작에 이상 없음
+  // timer의 변화를 직접적으로 Widget에 연결시킬 필요가 없기 때문에 넣지 않은 것이라 추측
   void onTick(Timer timer) {
-    setState(() {
-      totalSeconds -= 1;
-    });
+    if (totalSeconds == 0) {
+      timer.cancel();
+      setState(() {
+        totalSeconds = twentyFiveMinutes;
+        totalPomodoros += 1;
+        isRunning = false;
+      });
+    } else {
+      setState(() {
+        totalSeconds -= 1;
+      });
+    }
   }
 
   void onStartPressed() {
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
-
-    // timer에서 callback function으로 onTick을 사용하기 때문에 setState를 사용하지 않아도 될 것 같지만
-    // isRunning의 업데이트와 동시에 일어나지 않기 때문에 정상적으로 작동하지 않음
-    // 따라서 setState를 별도로 꼭 작성해주어야 함
     setState(() {
       isRunning = true;
     });
   }
 
   void onPausePressed() {
-    // calcel() : Timer을 초기화하는 함수
     timer.cancel();
     setState(() {
       isRunning = false;
     });
+  }
+
+  String format(int seconds) {
+    // Duration : 시간을 다양한 포맷으로 변환하여 반환할 수 있는 Type
+    // split : String을 지정한 기호 기준으로 잘라서 List로 반환
+    // substring : String을 시작점과 끝점까지 잘라내서 String으로 반환
+    var duration = Duration(seconds: seconds).toString().split(".");
+    var formattedSeconds = duration.first.substring(2);
+    // print(duration) // ["00:25:00", "000"]
+    return formattedSeconds;
   }
 
   @override
@@ -50,7 +70,8 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                "$totalSeconds",
+                // 1초마다 다시 build되기 때문에 format도 1초마다 실행됨
+                format(totalSeconds),
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 85,
@@ -101,7 +122,7 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
                           ),
                         ),
                         Text(
-                          "0",
+                          "$totalPomodoros",
                           style: TextStyle(
                             fontSize: 55,
                             fontWeight: FontWeight.w600,
