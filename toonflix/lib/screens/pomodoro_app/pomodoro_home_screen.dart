@@ -9,16 +9,13 @@ class PomodoroHomeScreen extends StatefulWidget {
 }
 
 class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
-  // static : class 안에서 해당 변수, 메서드가 인스턴스에 귀속되지 않고 class에 귀속된다는 의미
-  // const만 작성할 경우 static을 덧붙이거나 final로 변경하라는 에러 메시지가 뜸
   static const twentyFiveMinutes = 1500;
   int totalSeconds = twentyFiveMinutes;
   int totalPomodoros = 0;
   bool isRunning = false;
+  bool isStarted = false;
   late Timer timer;
 
-  // 아래 함수들에서 timer에 관련된 코드를 setState 안에 넣어도 동작에 이상 없음
-  // timer의 변화를 직접적으로 Widget에 연결시킬 필요가 없기 때문에 넣지 않은 것이라 추측
   void onTick(Timer timer) {
     if (totalSeconds == 0) {
       timer.cancel();
@@ -38,6 +35,7 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
     timer = Timer.periodic(const Duration(seconds: 1), onTick);
     setState(() {
       isRunning = true;
+      isStarted = true;
     });
   }
 
@@ -48,21 +46,33 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
     });
   }
 
+  // Code Challenge : totalSeconds를 reset하는 함수 만들기
+  // Custom Details
+  // 1. totalSeconds가 1500일 경우에는 ResetIcon 노출하지 않음
+  // - isStarted로 관리 (start 후 reset되기 전까지 true)
+  // 2. isRunning일 때 배경 색상 변경
+
+  void onResetPressed() {
+    timer.cancel();
+    setState(() {
+      totalSeconds = twentyFiveMinutes;
+      isRunning = false;
+      isStarted = false;
+    });
+  }
+
   String format(int seconds) {
-    // Duration : 시간을 다양한 포맷으로 변환하여 반환할 수 있는 Type
-    // split : String을 지정한 기호 기준으로 잘라서 List로 반환
-    // substring : String을 시작점과 끝점까지 잘라내서 String으로 반환
     var duration = Duration(seconds: seconds).toString().split(".");
     var formattedSeconds = duration.first.substring(2);
-    // print(duration) // ["00:25:00", "000"]
     return formattedSeconds;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO 230627 : context 접근하는 코드가 이렇게 구성되는 이유를 정확하게 파악하기
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: isRunning
+          ? Theme.of(context).colorScheme.background
+          : Theme.of(context).textTheme.displayLarge?.color,
       body: Column(
         children: [
           Flexible(
@@ -70,7 +80,6 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                // 1초마다 다시 build되기 때문에 format도 1초마다 실행됨
                 format(totalSeconds),
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
@@ -82,25 +91,50 @@ class _PomodoroHomeScreenState extends State<PomodoroHomeScreen> {
           ),
           Flexible(
             flex: 2,
-            child: Center(
-              child: IconButton(
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                color: Theme.of(context).cardColor,
-                icon: Icon(
-                  isRunning
-                      ? Icons.pause_circle_outline
-                      : Icons.play_circle_outline,
+            child: Column(
+              children: [
+                // Expanded와 Flexible은 유사한 Widget
+                // 공통점
+                // 1. flex(차지하는 비율)을 설정할 수 있음
+                // 2. Column, Row의 children에서만 사용할 수 있음
+                // 차이점
+                // - Expanded : 남아있는 공간 전부를 비율만큼 차지함
+                // - Flexible : 남아있는 공간을 차지하지만, child Widget이 공간을 전부 차지하지 않으면 나머지 공간은 버림
+                // - Expanded는 차지하는 비율, Flexible은 버리는 비율
+                Expanded(
+                  flex: 3,
+                  child: IconButton(
+                    alignment: Alignment.bottomCenter,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    color: Theme.of(context).cardColor,
+                    icon: Icon(
+                      isRunning
+                          ? Icons.pause_circle_outline
+                          : Icons.play_circle_outline,
+                    ),
+                    iconSize: 110,
+                  ),
                 ),
-                iconSize: 110,
-              ),
+                Expanded(
+                  flex: 2,
+                  child: isStarted
+                      ? IconButton(
+                          alignment: Alignment.topCenter,
+                          onPressed: onResetPressed,
+                          color: Theme.of(context).cardColor,
+                          icon: const Icon(Icons.refresh_outlined),
+                          iconSize: 50,
+                        )
+                      // SizedBox.shrink() : 빈 위젯, 가장 작은 크기를 가짐
+                      : const SizedBox.shrink(),
+                ),
+              ],
             ),
           ),
           Flexible(
             flex: 1,
             child: Row(
               children: [
-                // TODO 230627 : Row, Column, Container, Expended, Center 등 기본 Widget 파악하기
-                // TODO 230627 : Container - Row - Column 순으로 배치했을 때 화면 전체를 차지하는 이유 알아보기
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
