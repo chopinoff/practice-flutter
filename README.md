@@ -18,7 +18,8 @@
 - Project Summary의 **각 소단원의 마지막 커밋 해시코드**를 사용하면 원하는 커밋으로 빠르게 이동할 수 있음
 - 이전 커밋 내역 확인하기 : `git log` 입력 후 아래 방향키 (종료는 q)
 - 원하는 커밋의 해시코드 복사 후 해당 커밋 시점으로 이동 : `git checkout 복사한 해시코드`
-- 가장 최신 커밋으로 돌아오기 : `git checkout -`
+- 이동 직전 커밋으로 돌아가기 : `git checkout -`
+- 가장 최신 커밋으로 돌아가기 : `git checkout 브랜치 이름`
 <br>
 
 ## Project Summary
