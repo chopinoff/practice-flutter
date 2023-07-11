@@ -8,6 +8,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  // 이 Widget의 key(Identifier)를 StatelessWidget이라는 super class로 보냄
   const App({super.key});
 
   @override
