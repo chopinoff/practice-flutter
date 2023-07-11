@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:toonflix/screens/pomodoro_app/pomodoro_home_screen.dart';
-import 'package:toonflix/themes/pomodoro_theme.dart';
+import 'package:toonflix/screens/webtoon_app/home_screen.dart';
+import 'package:toonflix/utils/status_bar_style.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)));
+  StatusBarStyle.statusBarStyle;
   runApp(const App());
 }
 
@@ -14,9 +12,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: PomodoroTheme.mainTheme,
-      home: const PomodoroHomeScreen(),
+    return const MaterialApp(
+      home: HomeScreen(),
     );
   }
 }

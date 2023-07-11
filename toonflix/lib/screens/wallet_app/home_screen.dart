@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/button.dart';
 import '../../widgets/currency_card.dart';
 
-class WalletHomeScreen extends StatelessWidget {
-  const WalletHomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
