@@ -28,22 +28,13 @@ class HomeScreen extends StatelessWidget {
         future: webtoons,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // ListView : Scroll view 제공하는 Widget
-            // ListView.builder : 사용자가 보고있는 item만 build함
-            // ListView.seperated : ListView.builder + seperatorBuilder(item 구분 Widget Builder)
-            return ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                var webtoon = snapshot.data![index];
-                print(index);
-                return Text(webtoon.title);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  width: 20,
-                );
-              },
+            return Column(
+              children: [
+                const SizedBox(height: 50),
+                // ListView에 높이값이 없기 때문에 무한한 높이를 가짐 > Expanded로 감싸기
+                // Expanded : Column, Row의 child에서 빈 공간을 차지함
+                Expanded(child: makeList(snapshot)),
+              ],
             );
           }
           return const Center(
@@ -51,6 +42,64 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  // ListView Widget 분리
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+      // boxShadow가 잘리지 않도록 패딩 추가
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 20,
+      ),
+      scrollDirection: Axis.horizontal,
+      itemCount: snapshot.data!.length,
+      itemBuilder: (context, index) {
+        var webtoon = snapshot.data![index];
+        return Column(
+          children: [
+            Container(
+              width: 220,
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 15,
+                    offset: const Offset(10, 10),
+                    color: Colors.black.withOpacity(0.3),
+                  ),
+                ],
+              ),
+              child: Image.network(
+                webtoon.thumb,
+                // User-Agent를 따로 설정하지 않을 시 기본값으로 Dart/<version> (dart:io)가 들어감
+                // 브라우저 환경이 아니면 네이버에서 차단하기 때문에 브라우저 값으로 설정
+                headers: const {
+                  "User-Agent":
+                      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              webtoon.title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const SizedBox(
+          width: 40,
+        );
+      },
     );
   }
 }
