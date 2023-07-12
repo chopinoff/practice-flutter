@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
 
-// StatelessWidget에서 Data Fetching 할 수 있음 : FutureBuilder
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  // 목표 : Future 기다리기 + 결과가 나왔을 때 build 재실행하기
   final Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
 
   @override
@@ -27,14 +25,30 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        // future : await 처리 할 대상
         future: webtoons,
         builder: (context, snapshot) {
-          // snapshot : future의 상태
           if (snapshot.hasData) {
-            return const Text("There is Data!");
+            // ListView : Scroll view 제공하는 Widget
+            // ListView.builder : 사용자가 보고있는 item만 build함
+            // ListView.seperated : ListView.builder + seperatorBuilder(item 구분 Widget Builder)
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var webtoon = snapshot.data![index];
+                print(index);
+                return Text(webtoon.title);
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  width: 20,
+                );
+              },
+            );
           }
-          return const Text("Loading...");
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
