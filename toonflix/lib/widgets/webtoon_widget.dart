@@ -62,8 +62,6 @@ class Webtoon extends StatelessWidget {
       },
       child: Column(
         children: [
-          // Hero : Hero의 tag가 같은 Widget은 화면 전환 시 같은 Widget처럼 움직임
-          // Webtoon과 DetailScreen에 포함된 WebtoonCard를 Hero로 감싸준 후, tag: id로 지정
           Hero(
             tag: id,
             child: WebtoonCard(title: title, thumb: thumb, id: id),
