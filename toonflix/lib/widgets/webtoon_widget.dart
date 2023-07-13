@@ -13,36 +13,19 @@ class Webtoon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // GestureDetector : 제스처에 따라 이벤트를 발생하는 Widget
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context, route) : route에 해당하는 페이지로 이동
-        // route는 StatelessWidget을 지원하지 않음 > Route로 변경해야 함
-        // 1. MetarialPageRoute : StatelessWidget을 route로 감싸주는 Widget
-        // 운영 체제에 따라 다른 interface 제공 (넘어가는 방향 등)
-        // 2. PageRouteBuilder
-        // 운영 체제에 구애받지 않고 애니메이션 적용
-        // https://docs.flutter.dev/cookbook/animation/page-route-animation
-        // https://api.flutter.dev/flutter/widgets/PageRouteBuilder/buildTransitions.html
-
         Navigator.push(
           context,
           PageRouteBuilder(
-            // 1. pageBuilder : 이동할 페이지(Widget)을 반환하는 함수
             pageBuilder: (context, animation, secondaryAnimation) =>
                 DetailScreen(title: title, thumb: thumb, id: id),
-            // 2. transitionsBuilder : 이동 시 애니메이션을 설정하는 함수
-            // - animation : 라우터 이동 시 애니메이션
-            // - secondaryAnimation : 페이지 빠져나올 시 애니메이션
-            // - child : 애니메이션 적용 할 컴포넌트
             transitionsBuilder: (
               context,
               animation,
               secondaryAnimation,
               child,
             ) {
-              // SlideTransition을 반환
-              // 여러 개(animation, secondaryAnimation)를 설정하는 경우, Stack에 담아서 반환
               return Stack(
                 children: [
                   SlideTransition(
@@ -55,8 +38,6 @@ class Webtoon extends StatelessWidget {
                         curve: Curves.ease,
                       ),
                     ),
-                    // child : SlideTransition을 실행할 Widget
-                    // SlideTransition이 여러 개일 경우에도 한 번만 설정해줌 (child를 동일한 Widget으로 중복 설정하면 에러 발생)
                     child: child,
                   ),
                   SlideTransition(
@@ -73,18 +54,20 @@ class Webtoon extends StatelessWidget {
                 ],
               );
             },
-            // duration : animation, secondaryAnimation의 시간 설정
             transitionDuration: const Duration(milliseconds: 300),
             reverseTransitionDuration: const Duration(milliseconds: 300),
-            // fullscreenDialog : true면 닫기 버튼, false면 뒤로가기 버튼
             fullscreenDialog: true,
           ),
         );
       },
-      // WebtoonCard Widget 분리
       child: Column(
         children: [
-          WebtoonCard(title: title, thumb: thumb, id: id),
+          // Hero : Hero의 tag가 같은 Widget은 화면 전환 시 같은 Widget처럼 움직임
+          // Webtoon과 DetailScreen에 포함된 WebtoonCard를 Hero로 감싸준 후, tag: id로 지정
+          Hero(
+            tag: id,
+            child: WebtoonCard(title: title, thumb: thumb, id: id),
+          ),
           const SizedBox(
             height: 15,
           ),

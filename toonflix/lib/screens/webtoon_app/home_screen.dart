@@ -54,7 +54,6 @@ class HomeScreen extends StatelessWidget {
       itemCount: snapshot.data!.length,
       itemBuilder: (context, index) {
         var webtoon = snapshot.data![index];
-        // UI Widget 파일 분리
         return Webtoon(
           title: webtoon.title,
           thumb: webtoon.thumb,

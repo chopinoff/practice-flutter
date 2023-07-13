@@ -37,7 +37,10 @@ class DetailScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  WebtoonCard(title: title, thumb: thumb, id: id),
+                  Hero(
+                    tag: id,
+                    child: WebtoonCard(title: title, thumb: thumb, id: id),
+                  ),
                 ],
               ),
             ],
