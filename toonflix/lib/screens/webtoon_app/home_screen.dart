@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
+import 'package:toonflix/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -31,8 +32,6 @@ class HomeScreen extends StatelessWidget {
             return Column(
               children: [
                 const SizedBox(height: 50),
-                // ListView에 높이값이 없기 때문에 무한한 높이를 가짐 > Expanded로 감싸기
-                // Expanded : Column, Row의 child에서 빈 공간을 차지함
                 Expanded(child: makeList(snapshot)),
               ],
             );
@@ -45,10 +44,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ListView Widget 분리
   ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
     return ListView.separated(
-      // boxShadow가 잘리지 않도록 패딩 추가
       padding: const EdgeInsets.symmetric(
         vertical: 10,
         horizontal: 20,
@@ -57,42 +54,11 @@ class HomeScreen extends StatelessWidget {
       itemCount: snapshot.data!.length,
       itemBuilder: (context, index) {
         var webtoon = snapshot.data![index];
-        return Column(
-          children: [
-            Container(
-              width: 220,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 15,
-                    offset: const Offset(10, 10),
-                    color: Colors.black.withOpacity(0.3),
-                  ),
-                ],
-              ),
-              child: Image.network(
-                webtoon.thumb,
-                // User-Agent를 따로 설정하지 않을 시 기본값으로 Dart/<version> (dart:io)가 들어감
-                // 브라우저 환경이 아니면 네이버에서 차단하기 때문에 브라우저 값으로 설정
-                headers: const {
-                  "User-Agent":
-                      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              webtoon.title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
+        // UI Widget 파일 분리
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
         );
       },
       separatorBuilder: (context, index) {
